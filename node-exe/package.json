@@ -1,0 +1,14 @@
+{
+  "name": "node-exe",
+  "version": "1.0.0",
+  "description": "Trying node for the first time on my own.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Jozsef Vass",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}

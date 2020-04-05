@@ -1,0 +1,57 @@
+[
+  {
+    "id": 0,
+    "name": "Pizza margherita",
+    "person": 4,
+    "ingredients": {
+      "dough": {
+        "flour": "1kg",
+        "warm-water": "600ml",
+        "yeast": "25g",
+        "olive-oil": "6tbs",
+        "salt": "1.5ds"
+      },
+      "toppings": {
+        "tomato pure": "0.4kg",
+        "cheese": "0.5kg",
+        "salami": "40dkg",
+        "sugar": "2ds",
+        "basil": "as you like it",
+        "salt": "as you like it"
+      }
+    },
+    "image": "pizza.jpg",
+    "preparation": " 1. Make the base: Put the flour into a large bowl, then stir in the yeast and salt. Make a well, pour in 200ml warm water and the olive oil and bring together with a wooden spoon until you have a soft, fairly wet dough. Turn onto a lightly floured surface and knead for 5 mins until smooth. Cover with a tea towel and set aside. You can leave the dough to rise if you like, but it’s not essential for a thin crust. 2. Make the sauce: Mix the passata, basil and crushed garlic together, then season to taste. Leave to stand at room temperature while you get on with shaping the base. 3. Roll out the dough: If you’ve let the dough rise, give it a quick knead, then split into two balls. On a floured surface, roll out the dough into large rounds, about 25cm across, using a rolling pin. The dough needs to be very thin as it will rise in the oven. Lift the rounds onto two floured baking sheets. 4. Top and bake: Heat oven to 240C/fan 220C /gas 8. Put another baking sheet or an upturned baking tray in the oven on the top shelf. Smooth sauce over bases with the back of a spoon. Scatter with cheese and tomatoes, drizzle with olive oil and season. Put one pizza, still on its baking sheet, on top of the preheated sheet or tray. Bake for 8-10 mins until crisp. Serve with a little more olive oil, and basil leaves if using. Repeat step for remaining pizza."
+  },
+  {
+    "id": 1,
+    "name": "Tuna Salad",
+    "person": 4,
+    "ingredients": {
+      "green leaves": "any you like",
+      "canned tuna": 1,
+      "avocado": 1,
+      "tomato": "0.2kg",
+      "cucumber": "0.2kg",
+      "red onion": 1,
+      "grated chedar": "a handful",
+      "grated carrot": 1
+    },
+    "image": "tuna.jpg",
+    "preparation": "I am not sure how long it would take for him to get bored of it if he did do that, but it really is VERY GOOD. And trust me, it’s the simplest thing. As long as you have a can of tuna fish in your pantry, you can make it with salad ingredients that you’ve probably got in your fridge most of the time.Until now I haven’t thought of sharing it with you, but I figured that if we eat it so often – at least once every two weeks – maybe some of you would appreciate the idea, too. So as I’ve probably made some version of this easy tuna fish salad tens (possibly approaching hundreds) of times, I now consider myself an expert on it, and in my humble opinion this is what you should include for maximum deliciousness."
+  },
+  {
+    "id": 2,
+    "name": "Scrambled egg",
+    "person": 2,
+    "ingredients": {
+      "eggs": 4,
+      "milk": "1/4 cup",
+      "salt": "pinch",
+      "pepper": "pinch",
+      "butter": "2tsp"
+    },
+    "image": "scrambled-egg.jpg",
+    "preparation": "BEAT eggs, milk, salt and pepper in medium bowl until blended. HEAT butter in large nonstick skillet over medium heat until hot. POUR in egg mixture. As eggs begin to set, gently PULL the eggs across the pan with a spatula, forming large soft curds. CONTINUE cooking—pulling, lifting and folding eggs—until thickened and no visible liquid egg remains. Do not stir constantly. REMOVE from heat. SERVE immediately. "
+  }
+]

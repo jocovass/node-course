@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipies</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: inherit;
+        }
+
+        body {
+            box-sizing: border-box;
+            font-family: fantasy;
+            height: 100vh;
+            background-image: linear-gradient(to right, #43e97b, #38f9d7);
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .title-main {
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .food {
+            width: 50%;
+            height: 75px;
+            overflow: hidden;
+            margin: 0 auto 2rem;
+            background-color: #eee;
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+            align-items: center;
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, .3)
+        }
+
+        .food_btn {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            align-self: stretch;
+            background-image: linear-gradient(to right, #4facfe, #00f2fe);
+        }
+
+        .food_btn:hover {
+            background-image: linear-gradient(to right, #00f2fe, #4facfe);
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title-main">Check out our delicious foods</h1>
+    <main class="container">
+        {%CARDS%}
+    </main>
+</body>
+
+</html>
