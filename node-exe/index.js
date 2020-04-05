@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
 
   if (pathname === "/all" || pathname === "/") {
     res.writeHead(200, { "Content-type": "text/html" });
-    const cardhtml = dataObj.map(el => replaceCard(el, cardTemp)).join("");
+    const cardhtml = dataObj.map((el) => replaceCard(el, cardTemp)).join("");
     const output = indexTemp.replace("{%CARDS%}", cardhtml);
 
     res.end(output);
@@ -27,9 +27,14 @@ const server = http.createServer((req, res) => {
     const ingHtml = createIngredients(dataObj[query.id].ingredients);
     const output = replaceRecipie(dataObj[query.id], recipieTemp, ingHtml);
     res.end(output);
+  } else if (pathname.slice(pathname.length - 3) === "jpg") {
+    fs.readFile(`${__dirname}/img/${pathname}`, (err, data) => {
+      res.writeHead(200);
+      res.end(data);
+    });
   } else {
     res.writeHead(404, {
-      "Content-type": "text/html"
+      "Content-type": "text/html",
     });
     res.end("<h1>ERROR 404: Page not found!</h1>");
   }
