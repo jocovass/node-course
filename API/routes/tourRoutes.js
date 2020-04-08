@@ -5,17 +5,15 @@ const {
   createTour,
   updateTour,
   deleteTour,
-  checkId,
-  checkBody,
-} = require('./../controllers/tourController');
+} = require('../controllers/tourController');
 
 //TOURS
 const router = express.Router();
 
-//param midleware gor checking id
-router.param('id', checkId);
+// //param midleware gor checking id
+// router.param('id', checkId);
 
-router.route('/').get(getAllTours).post(checkBody, createTour);
+router.route('/').get(getAllTours).post(createTour);
 router.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
 
 module.exports = router;
