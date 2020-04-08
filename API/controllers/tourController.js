@@ -1,27 +1,26 @@
 const Tour = require('../models/tourModel');
+const APIFeatures = require('../utils/apiFeatures');
 
-//reading the tours file into our application
-//this top level code gets executed only once when we spin up the server so our synchronous code won't block the app.
-// const tours = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-// );
-// //check body midleware
-// exports.checkBody = (req, res, next) => {
-//   if (!req.body.name || !req.body.price) {
-//     return res.status(400).json({
-//       status: 'fail',
-//       message: 'Bad request!',
-//     });
-//   }
-//   console.log(req.body);
-//   next();
-// };
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.sort = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
 
-//Route handlers
+//ROUTE handlers
 exports.getAllTours = async (req, res) => {
   try {
-    //on the Tour model we can call the find method which will retun all the matched results, if there is no arg. will return all the data
-    const tours = await Tour.find();
+    //BUILD QUERY
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limit()
+      .paginate();
+
+    //EXECUTE QUERY
+    const tours = await features.query;
+
     res.status(200).json({
       status: 'success',
       results: tours.length,
@@ -30,7 +29,7 @@ exports.getAllTours = async (req, res) => {
       },
     });
   } catch (err) {
-    res.send(400).json({
+    res.status(404).json({
       status: 'fail',
       message: 'The request was wrong',
     });

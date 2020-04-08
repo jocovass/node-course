@@ -50,6 +50,7 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(), //mongo will convert milliseconds into timestamp
+    select: false,
   },
   startDates: [Date],
 });
