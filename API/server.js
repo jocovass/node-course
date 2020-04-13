@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+// when uncaughtException happens in our application we must 'CRUSh' stop our app because after there was an uncaught exception the entire node process is in a so-called unclean state
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 SHUTTING DOWN...');
+  console.log(err);
+  process.exit(1);
+});
+
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 
@@ -21,6 +28,15 @@ mongoose
 
 //listening on port 3000
 const port = process.env.PORT;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App, running on port ${port}`);
+});
+
+// each time there is an unhandled rejection somewhere in our application the process object will emit an object called unhandled rejection, we can subscribe to that event with process.on(), where we call server.close() -> by doing so we will tell the application to send respsonse to the hanging requests and after close the app calling process.exit().
+process.on('unhandledRejection', (err) => {
+  console.log('UNHADLED REJECTION! 💥 SHUTTING DOWN...');
+  console.log(err);
+  server.close(() => {
+    process.exit(1);
+  });
 });

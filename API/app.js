@@ -1,27 +1,25 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const AppError = require('./utils/appError');
+const globalErrorController = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
 //creating server
 const app = express();
-//express midleware for modifing the incomeing request
+//express middleware for modifing the incomeing request
 //so that we have access to the requerst body which is not included in express by default
 app.use(express.json());
-//midleware for serving public files
+//middleware for serving public files
 app.use(express.static('public'));
 
-//THIRD party midleware
+//THIRD party middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-//creating CUSTOME midleware
-app.use((req, res, next) => {
-  console.log('Hello from the midleware.');
-  next();
-});
+//creating CUSTOME middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
@@ -41,5 +39,16 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+
+app.all('*', (req, res, next) => {
+  const err = new AppError(
+    `Can't finde ${req.originalUrl} on this server!`,
+    404
+  );
+  // if we pass any argument to the next() func express will know that some error happend so itt will skip all the following middleware and call the error handleing middleware
+  next(err);
+});
+
+app.use(globalErrorController);
 
 module.exports = app;
