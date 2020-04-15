@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// when uncaughtException happens in our application we must 'CRUSh' stop our app because after there was an uncaught exception the entire node process is in a so-called unclean state
+// when uncaughtException happens in our application we must 'CRUSH' stop our app because after there was an uncaught exception the entire node process is in a so-called unclean state
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 SHUTTING DOWN...');
   console.log(err);
