@@ -1,5 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const AppError = require('./utils/appError');
 const globalErrorController = require('./controllers/errorController');
@@ -10,32 +15,52 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 //express middleware for modifing the incomeing request
 //so that we have access to the requerst body which is not included in express by default
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
+
 //middleware for serving public files
 app.use(express.static('public'));
 
-//THIRD party middleware
+//THIRD party middleware "logger"
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+//limit the number of req. allowed from the same IP
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many request from this IP, please try again in an hour!',
+});
+app.use('/api', limiter);
+
+//Set security header metadata
+app.use(helmet());
+
+//Data sanitizastion against NoSQL query injection
+app.use(mongoSanitize());
+
+//Data sanitization against XSS
+app.use(xss());
+
+//Prevetn parameter polution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQueantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  })
+);
 
 //creating CUSTOME middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
-
-//setting up some ROUTES
-//GET request with params
-//we can have more params or even optional params ":id?"
-// app.get('/api/v1/tours/:id', getTour);
-// app.get('/api/v1/tours', getAllTours);
-// // //POST request
-// app.post('/api/v1/tours', createTour);
-// //PATCH request
-// app.patch('/api/v1/tours/:id', updateTour);
-// //DELETE request
-// app.delete('/api/v1/tours/:id', deleteTour);
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
