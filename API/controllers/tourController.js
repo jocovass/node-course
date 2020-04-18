@@ -33,6 +33,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 
 exports.getTour = catchAsync(async (req, res, next) => {
   // === Tour.findOne({ _id: re.params.id })
+  //we are populating our guides for the queried tour, it is going to fetch the guides from a diffrent collection and populate only the quiery but the database
   const tour = await Tour.findById(req.params.id);
 
   if (!tour) {

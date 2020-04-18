@@ -85,6 +85,32 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      // mongoDB uses a special format GeoJSON for geolocational data
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      adress: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          defualt: 'Point',
+          enum: ['Point'],
+          coordinates: [Number],
+          adress: String,
+          description: String,
+          day: Number,
+        },
+      },
+    ],
+    //This is a special mongoDB type "ObjectId" to tell mongo we are referencing documents by their ID and we give the refrence to the collection where we want to reference the documents from
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   },
   {
     // on the schema we can specify a second argument object to tell mongoDB when to add the virtual property to our data
@@ -105,6 +131,15 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
+//We can embed guides trough this PRE middleware function by fetching the persons with their ID
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = await this.guides.map(
+//     async (id) => await User.findById(id)
+//   );
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
+
 /*tourSchema.pre('save', function (next) {
   console.log('Will save document...');
   next();
@@ -120,6 +155,15 @@ tourSchema.pre('save', function (next) {
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+
   next();
 });
 
