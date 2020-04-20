@@ -42,6 +42,7 @@ const tourSchema = new mongoose.Schema(
       default: 4.5,
       min: [1, 'Rating must be above 1.'],
       max: [5, 'Rating must be belove 5.'],
+      set: (val) => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
@@ -119,9 +120,20 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
+
 // VIRTUAL PROPERTIES when we dont want to save a data into the DB but we want int to be included whenever the user requests our tour.
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
+});
+
+//virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 });
 
 //DOCUMENT MIDDLEWARE will act on the currently proccessed document
@@ -173,10 +185,10 @@ tourSchema.post(/^find/, function (doc, next) {
 });
 
 //AGGREGATION MIDDLEWARE
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
