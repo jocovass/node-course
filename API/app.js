@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -5,21 +6,33 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorController = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRouts');
+const viewRouter = require('./routes/viewRouts');
 
 //creating server
 const app = express();
+
+//We tell express what view engine we are going to use, express automaticlly supports pug
+app.set('view engine', 'pug');
+
+//then we have to define where these templates are located
+app.set('views', path.join(__dirname, 'views'));
+
 //express middleware for modifing the incomeing request
 //so that we have access to the requerst body which is not included in express by default
 app.use(express.json({ limit: '10kb' }));
 
 //middleware for serving public files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+//parsing data from a urlencoded request
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
 
 //THIRD party middleware "logger"
 if (process.env.NODE_ENV === 'development') {
@@ -60,9 +73,11 @@ app.use(
 //creating CUSTOME middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookie);
   next();
 });
 
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);

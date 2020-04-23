@@ -69,6 +69,15 @@ exports.login = catchAsync(async (req, res, next) => {
   // all we send back to the user is the token and the status, this is how it works on a stateless authentication
 });
 
+exports.logout = (req, res, next) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({ status: 'success' });
+};
+
 // Based on the user credentials we can controlle the access over our app.
 exports.protect = catchAsync(async (req, res, next) => {
   const { authorization } = req.headers;
@@ -76,6 +85,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 1. Getting token and check if it's there
   if (authorization && authorization.startsWith('Bearer')) {
     token = authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -102,6 +113,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 
@@ -197,3 +209,33 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4. Log user in send JWT
   createSendToken(user, 200, res);
 });
+
+// Only for rendered pages, no errors!
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1. Verifys token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2. Check if youser still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3. Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // There is a logged in user
+      res.locals.user = currentUser;
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};

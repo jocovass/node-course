@@ -24,7 +24,8 @@ mongoose
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then(() => console.log('DB connection successful!'));
+  .then(() => console.log('DB connection successful!'))
+  .catch((err) => console.log(err));
 
 //listening on port 3000
 const port = process.env.PORT;
@@ -32,7 +33,7 @@ const server = app.listen(port, () => {
   console.log(`App, running on port ${port}`);
 });
 
-// each time there is an unhandled rejection somewhere in our application the process object will emit an object called unhandled rejection, we can subscribe to that event with process.on(), where we call server.close() -> by doing so we will tell the application to send respsonse to the hanging requests and after close the app calling process.exit().
+// each time there is an unhandled rejection somewhere in our application the process object will emit an event called unhandled rejection, we can subscribe to that event with process.on(), where we call server.close() -> by doing so we will tell the application to send respsonse to the hanging requests and after close the app calling process.exit().
 process.on('unhandledRejection', (err) => {
   console.log('UNHADLED REJECTION! 💥 SHUTTING DOWN...');
   console.log(err);
