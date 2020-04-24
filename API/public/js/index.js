@@ -29,10 +29,12 @@ if (loginForm) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    const name = this.elements.name.value;
-    const email = this.elements.email.value;
+    const form = new FormData();
+    form.append('name', this.elements.name.value);
+    form.append('email', this.elements.email.value);
+    form.append('photo', this.elements.photo.files[0]);
 
-    updateSettings({ name, email }, 'data');
+    updateSettings(form, 'data');
   });
 }
 

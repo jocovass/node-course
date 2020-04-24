@@ -8,6 +8,8 @@ const {
   updateMe,
   deleteMe,
   getMe,
+  uploadUserPhoto,
+  resizeUserPhoto,
 } = require('../controllers/userController');
 const {
   signup,
@@ -33,7 +35,8 @@ router.use(protect);
 
 router.get('/me', getMe, getUser);
 router.patch('/updateMyPassword', updatePassword);
-router.patch('/updateMe', updateMe);
+// here we use multer as a middleware and gave the name of the field in the req body we want to save
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 router.delete('/deleteMe', deleteMe);
 
 router.use(restrictTo('admin'));
