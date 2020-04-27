@@ -60,7 +60,6 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   // 1. Create an error if the user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
