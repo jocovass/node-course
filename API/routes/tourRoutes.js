@@ -15,7 +15,7 @@ const {
 } = require('../controllers/tourController');
 const { protect, restrictTo } = require('../controllers/authController');
 // const { createReview } = require('../controllers/reviewController');
-const reviewRouter = require('./reviewRouts');
+const reviewRouter = require('./reviewRoutes');
 
 //TOURS
 const router = express.Router();
